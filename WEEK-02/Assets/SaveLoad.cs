@@ -23,22 +23,16 @@ public static class SaveLoad
         fileStream.Close();
     }
 
-    public static bool Load()
+    public static void Load()
     {
         if (File.Exists(Application.persistentDataPath + path))
         {
             BinaryFormatter binaryFormatter = new BinaryFormatter();
             FileStream fileStream = File.Open(Application.persistentDataPath + path, FileMode.Open);
 
-            savedGameManager = (Manager) binaryFormatter.Deserialize(fileStream);
+            savedGameManager = (Manager)binaryFormatter.Deserialize(fileStream);
 
             fileStream.Close();
-
-            return true;
-        }
-        else
-        {
-            return false;
         }
     }
 }

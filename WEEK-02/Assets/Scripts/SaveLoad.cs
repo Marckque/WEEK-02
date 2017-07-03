@@ -7,7 +7,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 public static class SaveLoad
 {
     public static Manager savedGameManager;
-    public static string path = "/poem.toDiscover";
+    public static string path = "/aPoem.toShare";
 
     public static void Save(Manager a_Manager)
     {

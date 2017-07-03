@@ -52,6 +52,20 @@ public class LockedTextManager : MonoBehaviour
 
             UpdatePoem();
         }
+
+        if (Input.GetKeyDown(KeyCode.Backspace))
+        {
+            if (debugValue < SaveLoad.savedGameManager.wordsOfPoem.Length - 1)
+            {
+                minimumDisplayTime = 0f;
+                maximumDisplayTime = 0.01f;
+                debugValue += 100;
+            }
+
+            StopAllCoroutines();
+
+            UpdatePoem();
+        }
     }
 #endif
 
@@ -136,7 +150,9 @@ public class LockedTextManager : MonoBehaviour
             }
 
             displayedPoem += currentCharacters[i];
-            displayedPoem = displayedPoem.Replace("$", "\n").Replace("*", "- Fin -"); // creates a line return
+            displayedPoem = displayedPoem.Replace("$", "\n"); // creates a line return
+            displayedPoem = displayedPoem.Replace("*", "- Fin -");
+            displayedPoem = displayedPoem.Replace("+", "- End -");
             poemText.text = displayedPoem;
 
             yield return new WaitForSeconds(Random.Range(minimumDisplayTime, maximumDisplayTime));

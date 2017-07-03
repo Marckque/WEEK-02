@@ -62,6 +62,11 @@ public class LockedTextManager : MonoBehaviour
             PoemInWords();
             SetTitleAndPage();
 
+            if (Random.value <= 0.5f)
+            {
+                SaveLoad.savedGameManager.bonusValue += Random.Range(1, 3);
+            }
+
             SaveLoad.Save(SaveLoad.savedGameManager);
         }
     }
@@ -96,7 +101,7 @@ public class LockedTextManager : MonoBehaviour
     {
         currentPoem = "";
 
-        for (int i = 0; i < SaveLoad.savedGameManager.uniqueComputersID.Count + debugValue; i++)
+        for (int i = 0; i < SaveLoad.savedGameManager.uniqueComputersID.Count + SaveLoad.savedGameManager.bonusValue + debugValue; i++)
         {
             currentPoem += SaveLoad.savedGameManager.wordsOfPoem[i] + " ";
         }

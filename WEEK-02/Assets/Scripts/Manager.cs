@@ -13,6 +13,7 @@ public class Manager
     public string title;
     public string[] wordsOfPoem;
     public int page;
+    public int bonusValue;
 
     public Manager()
     {

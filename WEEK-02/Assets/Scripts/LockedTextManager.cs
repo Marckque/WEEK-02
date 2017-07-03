@@ -67,6 +67,7 @@ public class LockedTextManager : MonoBehaviour
                 SaveLoad.savedGameManager.bonusValue += Random.Range(1, 3);
             }
 
+
             SaveLoad.Save(SaveLoad.savedGameManager);
         }
     }

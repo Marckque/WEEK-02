@@ -25,7 +25,7 @@ public class LockedTextManager : MonoBehaviour
     private int debugValue;
 
     protected void Start()
-    {
+    { 
         SaveLoad.Load();
 
         CreateManager();
@@ -64,10 +64,8 @@ public class LockedTextManager : MonoBehaviour
 
             if (Random.value <= 0.5f)
             {
-                SaveLoad.savedGameManager.bonusValue += Random.Range(1, 3);
+                SaveLoad.savedGameManager.bonusValue += 1;
             }
-
-            Debug.Log("BonusValue: " + SaveLoad.savedGameManager.bonusValue);
 
             SaveLoad.Save(SaveLoad.savedGameManager);
         }
@@ -103,7 +101,8 @@ public class LockedTextManager : MonoBehaviour
     {
         currentPoem = "";
 
-        for (int i = 0; i < SaveLoad.savedGameManager.uniqueComputersID.Count + SaveLoad.savedGameManager.bonusValue + debugValue; i++)
+        int maxValue = Mathf.Clamp(SaveLoad.savedGameManager.uniqueComputersID.Count + SaveLoad.savedGameManager.bonusValue + debugValue, 0, SaveLoad.savedGameManager.wordsOfPoem.Length);
+        for (int i = 0; i < maxValue; i++)
         {
             currentPoem += SaveLoad.savedGameManager.wordsOfPoem[i] + " ";
         }

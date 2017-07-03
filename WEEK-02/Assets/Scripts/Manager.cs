@@ -14,6 +14,7 @@ public class Manager
     public string[] wordsOfPoem;
     public int page;
     public int bonusValue;
+    public float bonusValueComparer;
 
     public Manager()
     {

@@ -14,6 +14,7 @@ public class LockedTextManager : MonoBehaviour
 
     private TextMeshProUGUI[] allPoems;
 
+    [Header("Delay")]
     public float minimumDisplayTime;
     public float maximumDisplayTime;
 
@@ -37,6 +38,7 @@ public class LockedTextManager : MonoBehaviour
         UpdatePoem();
     }
 
+#if UNITY_EDITOR
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
@@ -51,6 +53,7 @@ public class LockedTextManager : MonoBehaviour
             UpdatePoem();
         }
     }
+#endif
 
     private void CheckComputerID()
     {
@@ -61,11 +64,7 @@ public class LockedTextManager : MonoBehaviour
             SelectPoem();
             PoemInWords();
             SetTitleAndPage();
-
-            if (Random.value <= 0.5f)
-            {
-                SaveLoad.savedGameManager.bonusValue += 1;
-            }
+            UpdateBonusChances();
 
             SaveLoad.Save(SaveLoad.savedGameManager);
         }
@@ -77,6 +76,19 @@ public class LockedTextManager : MonoBehaviour
         {
             Manager newManager = new Manager();
             SaveLoad.Save(newManager);
+        }
+    }
+
+    private void UpdateBonusChances()
+    {
+        if (SaveLoad.savedGameManager.uniqueComputersID.Count > 1)
+        {
+            float comparer = Mathf.Clamp(0.5f + SaveLoad.savedGameManager.bonusValueComparer, 0.5f, 1f);
+            if (Random.value <= comparer)
+            {
+                SaveLoad.savedGameManager.bonusValue += 1;
+                SaveLoad.savedGameManager.bonusValueComparer += 0.1f;
+            }
         }
     }
 

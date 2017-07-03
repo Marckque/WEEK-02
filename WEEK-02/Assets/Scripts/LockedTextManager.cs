@@ -5,13 +5,14 @@ using System.Collections;
 public class LockedTextManager : MonoBehaviour
 {
     [Header("Poems")]
-    public string[] titles;
     public TextMeshProUGUI titleText;
-    public string[] poems;
+    public Transform poemsRoot;
     public TextMeshProUGUI poemText;
     public TextMeshProUGUI pageText;
     private string currentPoem;
     private string displayedPoem;
+
+    private TextMeshProUGUI[] allPoems;
 
     public float minimumDisplayTime;
     public float maximumDisplayTime;
@@ -76,8 +77,14 @@ public class LockedTextManager : MonoBehaviour
 
     private void SelectPoem()
     {
-        selectedPoem = Random.Range(0, poems.Length);
-        SaveLoad.savedGameManager.poem = poems[selectedPoem];
+        allPoems = new TextMeshProUGUI[poemsRoot.childCount];
+        for (int i = 0; i < allPoems.Length; i++)
+        {
+            allPoems[i] = poemsRoot.GetChild(i).GetComponent<TextMeshProUGUI>();
+        }
+
+        selectedPoem = Random.Range(0, allPoems.Length);
+        SaveLoad.savedGameManager.poem = allPoems[selectedPoem].text;
     }
 
     private void PoemInWords()
@@ -141,12 +148,12 @@ public class LockedTextManager : MonoBehaviour
     private void SetTitleAndPage()
     {
         SaveLoad.savedGameManager.page = selectedPoem + 1;
-        SaveLoad.savedGameManager.title = titles[selectedPoem];
+        SaveLoad.savedGameManager.title = allPoems[selectedPoem].name;
     }
 
     private void UpdateTitleAndPage()
     {
         titleText.text = SaveLoad.savedGameManager.title;
-        pageText.text = SaveLoad.savedGameManager.page + "/" + poems.Length;
+        pageText.text = SaveLoad.savedGameManager.page + "/" + poemsRoot.childCount;
     }
 }

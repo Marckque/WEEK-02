@@ -154,6 +154,6 @@ public class LockedTextManager : MonoBehaviour
     private void UpdateTitleAndPage()
     {
         titleText.text = SaveLoad.savedGameManager.title;
-        pageText.text = SaveLoad.savedGameManager.page + "/" + poemsRoot.childCount;
+        pageText.text = "Poem n°" + SaveLoad.savedGameManager.page + " out of " + poemsRoot.childCount + ".";
     }
 }

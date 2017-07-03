@@ -1,10 +1,6 @@
 ﻿using TMPro;
-using System.Text;
-using System.Linq;
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
 
 public class LockedTextManager : MonoBehaviour
 {
@@ -13,7 +9,15 @@ public class LockedTextManager : MonoBehaviour
     private string currentPoem;
     private string displayedPoem;
     private TextMeshProUGUI poemText;
-    public int debugValue;
+
+    public float minimumDisplayTime;
+    public float maximumDisplayTime;
+
+    [Header("Sounds")]
+    public AudioClip[] typingSounds;
+    private AudioSource audioSource;
+
+    private int debugValue;
 
     protected void Start()
     {
@@ -21,11 +25,25 @@ public class LockedTextManager : MonoBehaviour
 
         CreateManager();
         CheckComputerID();
-        UpdatePoem();
 
+        audioSource = GetComponent<AudioSource>();
+        UpdatePoem();
     }
 
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (debugValue < SaveLoad.savedGameManager.wordsOfPoem.Length - 1)
+            {
+                debugValue += 1;
+            }
 
+            StopAllCoroutines();
+
+            UpdatePoem();
+        }
+    }
 
     private void CheckComputerID()
     {
@@ -84,11 +102,24 @@ public class LockedTextManager : MonoBehaviour
         {
             displayedPoem += currentCharacters[i];
             displayedPoem = displayedPoem.Replace("$", "\n"); // creates a line return
-
             poemText.text = displayedPoem;
 
-            yield return new WaitForSeconds(Random.Range(0f, 0f));
+            PlayTypingSound();
+
+            yield return new WaitForSeconds(Random.Range(minimumDisplayTime, maximumDisplayTime));
         }
+    }
+
+    private void PlayTypingSound()
+    {
+        int randomClip = Random.Range(0, typingSounds.Length);
+        audioSource.clip = typingSounds[randomClip];
+
+        if (!audioSource.isPlaying)
+        {
+            audioSource.Play();
+        }
+                
     }
 
     private char[] StringToCharArray(string value)

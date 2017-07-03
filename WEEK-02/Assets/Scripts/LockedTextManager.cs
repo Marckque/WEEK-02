@@ -5,10 +5,13 @@ using System.Collections;
 public class LockedTextManager : MonoBehaviour
 {
     [Header("Poems")]
+    public string[] titles;
+    public TextMeshProUGUI titleText;
     public string[] poems;
+    public TextMeshProUGUI poemText;
+    public TextMeshProUGUI pageText;
     private string currentPoem;
     private string displayedPoem;
-    private TextMeshProUGUI poemText;
 
     public float minimumDisplayTime;
     public float maximumDisplayTime;
@@ -17,6 +20,7 @@ public class LockedTextManager : MonoBehaviour
     public AudioClip[] typingSounds;
     private AudioSource audioSource;
 
+    private int selectedPoem;
     private int debugValue;
 
     protected void Start()
@@ -27,6 +31,8 @@ public class LockedTextManager : MonoBehaviour
         CheckComputerID();
 
         audioSource = GetComponent<AudioSource>();
+
+        UpdateTitleAndPage();
         UpdatePoem();
     }
 
@@ -53,6 +59,7 @@ public class LockedTextManager : MonoBehaviour
 
             SelectPoem();
             PoemInWords();
+            SetTitleAndPage();
 
             SaveLoad.Save(SaveLoad.savedGameManager);
         }
@@ -69,7 +76,7 @@ public class LockedTextManager : MonoBehaviour
 
     private void SelectPoem()
     {
-        int selectedPoem = Random.Range(0, poems.Length);
+        selectedPoem = Random.Range(0, poems.Length);
         SaveLoad.savedGameManager.poem = poems[selectedPoem];
     }
 
@@ -80,8 +87,6 @@ public class LockedTextManager : MonoBehaviour
 
     private void UpdatePoem()
     {
-        poemText = GetComponent<TextMeshProUGUI>();
-
         currentPoem = "";
 
         for (int i = 0; i < SaveLoad.savedGameManager.uniqueComputersID.Count + debugValue; i++)
@@ -100,11 +105,14 @@ public class LockedTextManager : MonoBehaviour
 
         for (int i = 0; i < currentCharacters.Length; i++)
         {
-            displayedPoem += currentCharacters[i];
-            displayedPoem = displayedPoem.Replace("$", "\n"); // creates a line return
-            poemText.text = displayedPoem;
+            if (i < currentCharacters.Length - 1)
+            {
+                PlayTypingSound();
+            }
 
-            PlayTypingSound();
+            displayedPoem += currentCharacters[i];
+            displayedPoem = displayedPoem.Replace("$", "\n").Replace("*", "- The end -"); // creates a line return
+            poemText.text = displayedPoem;
 
             yield return new WaitForSeconds(Random.Range(minimumDisplayTime, maximumDisplayTime));
         }
@@ -115,7 +123,7 @@ public class LockedTextManager : MonoBehaviour
         int randomClip = Random.Range(0, typingSounds.Length);
         audioSource.clip = typingSounds[randomClip];
 
-        if (!audioSource.isPlaying)
+        //if (!audioSource.isPlaying)
         {
             audioSource.Play();
         }
@@ -128,5 +136,17 @@ public class LockedTextManager : MonoBehaviour
         chars = value.ToCharArray();
 
         return chars;
+    }
+
+    private void SetTitleAndPage()
+    {
+        SaveLoad.savedGameManager.page = selectedPoem + 1;
+        SaveLoad.savedGameManager.title = titles[selectedPoem];
+    }
+
+    private void UpdateTitleAndPage()
+    {
+        titleText.text = SaveLoad.savedGameManager.title;
+        pageText.text = SaveLoad.savedGameManager.page + "/" + poems.Length;
     }
 }

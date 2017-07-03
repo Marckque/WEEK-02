@@ -10,7 +10,9 @@ public class Manager
     public List<string> uniqueComputersID = new List<string>();
 
     public string poem;
+    public string title;
     public string[] wordsOfPoem;
+    public int page;
 
     public Manager()
     {

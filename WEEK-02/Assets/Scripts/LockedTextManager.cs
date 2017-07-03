@@ -118,7 +118,7 @@ public class LockedTextManager : MonoBehaviour
             }
 
             displayedPoem += currentCharacters[i];
-            displayedPoem = displayedPoem.Replace("$", "\n").Replace("*", "- The end -"); // creates a line return
+            displayedPoem = displayedPoem.Replace("$", "\n").Replace("*", "- Fin -"); // creates a line return
             poemText.text = displayedPoem;
 
             yield return new WaitForSeconds(Random.Range(minimumDisplayTime, maximumDisplayTime));
@@ -130,11 +130,7 @@ public class LockedTextManager : MonoBehaviour
         int randomClip = Random.Range(0, typingSounds.Length);
         audioSource.clip = typingSounds[randomClip];
 
-        //if (!audioSource.isPlaying)
-        {
-            audioSource.Play();
-        }
-                
+        audioSource.Play();                
     }
 
     private char[] StringToCharArray(string value)
